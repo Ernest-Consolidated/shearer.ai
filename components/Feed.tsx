@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import PromptCard from "./PromptCard";
+import { IPost } from "@app/profile/page";
 
 interface IPromptCardList {
   data: any[];
@@ -24,9 +25,16 @@ const PromptCardList = ({ data, handleTagClick }: IPromptCardList) => {
 
 const Feed = () => {
   const [searchText, setSearchText] = useState<string>("");
-  const [posts, setPosts] = useState<any[]>([]);
+  const [posts, setPosts] = useState<IPost[]>([]);
+  const [filteredPosts, setFilteredPosts] = useState<IPost[]>([]);
 
-  const handleSearchChange = (e: any) => {};
+  const handleSearchChange = (e: any) => {
+    setSearchText(e.target.value);
+  };
+
+  const handleTagClick = (tag: string) => {
+    setSearchText(tag);
+  };
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -38,6 +46,22 @@ const Feed = () => {
 
     fetchPosts();
   }, []);
+
+  useEffect(() => {
+    if (searchText) {
+      const lowerCasedSearchText = searchText.toLowerCase();
+      setFilteredPosts(
+        posts.filter(
+          (post) =>
+            post.prompt.toLowerCase().includes(lowerCasedSearchText) ||
+            post.tag.toLowerCase().includes(lowerCasedSearchText) ||
+            post.creator.username.toLowerCase().includes(lowerCasedSearchText)
+        )
+      );
+    } else {
+      setFilteredPosts(posts);
+    }
+  }, [searchText, posts]);
 
   return (
     <section className="feed">
@@ -52,7 +76,7 @@ const Feed = () => {
         />
       </form>
 
-      <PromptCardList data={posts} handleTagClick={() => {}} />
+      <PromptCardList data={filteredPosts} handleTagClick={handleTagClick} />
     </section>
   );
 };
