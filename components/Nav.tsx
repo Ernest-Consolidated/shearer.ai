@@ -35,13 +35,13 @@ const Nav = () => {
     <nav className="flex-between w-full mb-16 pt-3">
       <Link href="/" className="flex gap-2 flex-center">
         <Image
-          src="/assets/images/logo.svg"
+          src="/assets/images/loggo.png"
           alt="logo"
           width={30}
           height={30}
           className="object-contain"
         />
-        <p className="logo_text">Shearer.ai</p>
+        <p className="logo_text">NeuraTalent</p>
       </Link>
 
       {/* Desktop navigation */}
